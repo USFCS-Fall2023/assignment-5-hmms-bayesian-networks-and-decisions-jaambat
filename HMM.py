@@ -103,8 +103,6 @@ class HMM:
             transmission_file.close()
             emission_file.close()
 
-        print()
-
     # you do this.
     def generate(self, n):
         """return an n-length observation by randomly sampling from this HMM."""
@@ -119,5 +117,13 @@ class HMM:
         """
 
 
+print("----------------------------------------------------\n"
+      "PART 1 - implement load()                           \n"
+      "----------------------------------------------------\n")
 hidden_markov = HMM()
 hidden_markov.load("two_english")
+print("-[x] Transmission map: ")
+print(hidden_markov.transitions)
+
+print("\n-[x] Emission map first 100 chars for preview: ")
+print(str(hidden_markov.emissions)[:100] + "...")

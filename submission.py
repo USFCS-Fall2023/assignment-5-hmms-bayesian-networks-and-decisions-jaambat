@@ -4,6 +4,7 @@ CS-462
 Assignment 5
 """
 
+import HMM
 """
 cd assignment-5-hmms-bayesian-networks-and-decisions-jaambat
 mkdir venv
@@ -21,3 +22,5 @@ source venv/bin/activate
 pip install -r requirements.txt
 python3 submission.py
 """
+
+
