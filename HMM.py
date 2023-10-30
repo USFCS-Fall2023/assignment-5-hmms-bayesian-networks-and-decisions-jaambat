@@ -70,7 +70,7 @@ class HMM:
                 # Each line will have three items, initial state, transmission state, probability
                 initial_state = tokenized_line[0]
                 transmission_state = tokenized_line[1]
-                probability = tokenized_line[2]
+                probability = float(tokenized_line[2])
 
                 if transmission_map.get(initial_state) is None:
                     transmission_map[initial_state] = {}
@@ -80,6 +80,21 @@ class HMM:
             # Save the transmission map
             self.transitions = transmission_map
 
+            # Process the transmission data into map
+            emission_map = {}
+            for line in emission_lines:
+                tokenized_line = line.split(" ")
+                # There are 3 items in the tokenized line: observation, conditional, probability
+                observation = tokenized_line[0]
+                conditional = tokenized_line[1]
+                probability = float(tokenized_line[2])
+
+                if emission_map.get(observation) is None:
+                    emission_map[observation] = {}
+
+                emission_map[observation][conditional] = probability
+
+            self.emissions = emission_map
         except FileNotFoundError:
             raise FileNotFoundError("The specified transmission and emission files could not be found.")
         except OSError:
