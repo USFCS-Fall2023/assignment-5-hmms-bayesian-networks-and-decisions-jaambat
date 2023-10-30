@@ -39,7 +39,6 @@ class HMM:
         self.transitions = transitions
         self.emissions = emissions
 
-
     # part 1 - you do this.
     def load(self, basename: str):
         """
@@ -56,10 +55,31 @@ class HMM:
             # Read in the transmission file
             transmission_file = open(transmission_txt, "r")
             transmission_lines = transmission_file.readlines()
+            transmission_lines = [item.strip() for item in transmission_lines]
 
             # Read in the emission file
             emission_file = open(emission_txt, "r")
             emission_lines = emission_file.readlines()
+            emission_lines = [item.strip() for item in emission_lines]
+
+            # Process the transmission data into map
+            transmission_map = {}
+            for line in transmission_lines:
+                tokenized_line = line.split(" ")
+
+                # Each line will have three items, initial state, transmission state, probability
+                initial_state = tokenized_line[0]
+                transmission_state = tokenized_line[1]
+                probability = tokenized_line[2]
+
+                if transmission_map.get(initial_state) is None:
+                    transmission_map[initial_state] = {}
+
+                transmission_map[initial_state][transmission_state] = probability
+
+            # Save the transmission map
+            self.transitions = transmission_map
+
         except FileNotFoundError:
             raise FileNotFoundError("The specified transmission and emission files could not be found.")
         except OSError:
