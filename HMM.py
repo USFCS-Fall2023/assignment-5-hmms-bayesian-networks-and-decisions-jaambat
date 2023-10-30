@@ -39,11 +39,36 @@ class HMM:
         self.transitions = transitions
         self.emissions = emissions
 
+
     # part 1 - you do this.
-    def load(self, basename):
-        """reads HMM structure from transition (basename.trans),
-        and emission (basename.emit) files,
-        as well as the probabilities."""
+    def load(self, basename: str):
+        """
+        reads HMM structure from transition (basename.trans), and emission (basename.emit) files, as well as the
+        probabilities.
+        :param basename: str basename of the transmission AND emission file to read from.
+        """
+        transmission_file = None
+        emission_file = None
+        try:
+            transmission_txt = basename + ".trans"
+            emission_txt = basename + ".emit"
+
+            # Read in the transmission file
+            transmission_file = open(transmission_txt, "r")
+            transmission_lines = transmission_file.readlines()
+
+            # Read in the emission file
+            emission_file = open(emission_txt, "r")
+            emission_lines = emission_file.readlines()
+        except FileNotFoundError:
+            raise FileNotFoundError("The specified transmission and emission files could not be found.")
+        except OSError:
+            raise OSError("There was an issue with reading the tranmission and emission files.")
+        finally:
+            transmission_file.close()
+            emission_file.close()
+
+        print()
 
     # you do this.
     def generate(self, n):
@@ -57,3 +82,7 @@ class HMM:
         find and return the state sequence that generated
         the output sequence, using the Viterbi algorithm.
         """
+
+
+hidden_markov = HMM()
+hidden_markov.load("two_english")
