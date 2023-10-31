@@ -44,18 +44,18 @@ class HMM:
         """
         reads HMM structure from transition (basename.trans), and emission (basename.emit) files, as well as the
         probabilities.
-        :param basename: str basename of the transmission AND emission file to read from.
+        :param basename: str basename of the transition AND emission file to read from.
         """
-        transmission_file = None
+        transition_file = None
         emission_file = None
         try:
-            transmission_txt = basename + ".trans"
+            transition_txt = basename + ".trans"
             emission_txt = basename + ".emit"
 
             # Read in the transmission file
-            transmission_file = open(transmission_txt, "r")
-            transmission_lines = transmission_file.readlines()
-            transmission_lines = [item.strip() for item in transmission_lines]
+            transition_file = open(transition_txt, "r")
+            transition_lines = transition_file.readlines()
+            transition_lines = [item.strip() for item in transition_lines]
 
             # Read in the emission file
             emission_file = open(emission_txt, "r")
@@ -63,8 +63,8 @@ class HMM:
             emission_lines = [item.strip() for item in emission_lines]
 
             # Process the transmission data into map
-            transmission_map = {}
-            for line in transmission_lines:
+            transition_map = {}
+            for line in transition_lines:
                 tokenized_line = line.split(" ")
 
                 # Each line will have three items, initial state, transmission state, probability
@@ -72,15 +72,15 @@ class HMM:
                 transmission_state = tokenized_line[1]
                 probability = float(tokenized_line[2])
 
-                if transmission_map.get(initial_state) is None:
-                    transmission_map[initial_state] = {}
+                if transition_map.get(initial_state) is None:
+                    transition_map[initial_state] = {}
 
-                transmission_map[initial_state][transmission_state] = probability
+                transition_map[initial_state][transmission_state] = probability
 
             # Save the transmission map
-            self.transitions = transmission_map
+            self.transitions = transition_map
 
-            # Process the transmission data into map
+            # Process the emission data into map
             emission_map = {}
             for line in emission_lines:
                 tokenized_line = line.split(" ")
@@ -98,13 +98,13 @@ class HMM:
         except FileNotFoundError:
             raise FileNotFoundError("The specified transmission and emission files could not be found.")
         except OSError:
-            raise OSError("There was an issue with reading the tranmission and emission files.")
+            raise OSError("There was an issue with reading the transmission and emission files.")
         finally:
-            transmission_file.close()
+            transition_file.close()
             emission_file.close()
 
     # you do this.
-    def generate(self, n: int):
+    def generate(self, n: int) -> list[str]:
         """
         return an n-length observation by randomly sampling from this HMM.
         :param n: int length of the number of observations.
@@ -124,9 +124,9 @@ class HMM:
             states[i] = random_choice
 
         # For each of the states get select a random observation from the emissions
-        observations = [None for _ in range(n + 1)]
+        observations = [None for _ in range(n)]
 
-        for i in range(len(states)):
+        for i in range(len(states) - 1):
             curr_state = states[i]
 
             emission = self.emissions[curr_state]
@@ -134,6 +134,80 @@ class HMM:
             observations[i] = observation
 
         return observations
+
+    def forward(self, observation_sequence: list[str]) -> str:
+        """
+        Forward algorithm determines the most likely final state from a sequence of observations.
+        :param observation_sequence: list[str] of observations from which to determine the final state.
+        :return: str of the final state
+        """
+
+        # Acquire starting probabilities
+        starting_probabilities_map = None
+        for item in self.transitions.items():
+            if item[0] == "#":
+                starting_probabilities_map = item[1]
+                break
+
+        # Initialize forward matrix, each row will be labeled by the state name as a key
+        column_names = ["-"]
+        column_names.extend(observation_sequence)
+        forward_matrix = {}
+        for item in starting_probabilities_map.items():
+            if forward_matrix.get(item[0]) is None:
+                # Initialize each row in the matrix and add column for starting probabilities
+                forward_matrix[item[0]] = [None for _ in range(len(observation_sequence) + 1)]
+                forward_matrix[item[0]][0] = item[1]
+
+        # Loop through each column and fill in probabilities in forward_matrix[i, j]
+        for j in range(1, len(column_names)):
+            curr_observation = column_names[j]
+
+            p_curr_state_given_curr_observation = 0
+
+            # Calculate P(curr_state | e_n, .... e1) for each of the states
+            for item in forward_matrix.items():
+                curr_state = item[0]
+
+                if j == 1:
+                    p_curr_observation_given_curr_state = self.emissions[curr_state][curr_observation]
+
+                    matrix_row = item[1]
+                    p_curr_state = matrix_row[0]
+
+                    # Apply Bayes rule and record the entry into the forward_matrix
+                    p_curr_state_given_curr_observation = p_curr_observation_given_curr_state * p_curr_state
+                    forward_matrix[curr_state][j] = p_curr_state_given_curr_observation
+                    continue
+
+                # For all possible states, acquire P(curr_state | e_n, .... e1) from the emissions and transitions
+                for state in forward_matrix.items():
+                    state_i = state[0]
+
+                    p_curr_observation_given_state_i = self.emissions[state_i][curr_observation]
+                    p_curr_state_given_state_i = self.transitions[state_i][curr_state]
+                    p_curr_state_prev_column = forward_matrix[state_i][j - 1]
+
+                    # Apply Bayes rule for each state we loop through.
+                    p_curr_state_given_curr_observation += (p_curr_observation_given_state_i *
+                                                            p_curr_state_given_state_i *
+                                                            p_curr_state_prev_column)
+
+                # Update the forward matrix AFTER applying the emissions and transitions for every state
+                forward_matrix[curr_state][j] = p_curr_state_given_curr_observation
+
+        # Inspect the last column of the forward_matrix to see which of the states has the highest probability
+        last_column_index = len(column_names) - 1
+        last_column = [(item[0], item[1][last_column_index]) for item in forward_matrix.items()]
+
+        entry_name = "None"
+        entry_value = 0
+        for entry in last_column:
+            if entry[1] > entry_value:
+                entry_value = entry[1]
+                entry_name = entry[0]
+
+        return entry_name
 
     # you do this: Implement the Viterbi alborithm. Given an Observation (a list of outputs or emissions)
     # determine the most likely sequence of states.
@@ -150,7 +224,7 @@ print("----------------------------------------------------\n"
       "----------------------------------------------------\n")
 hidden_markov = HMM()
 hidden_markov.load("two_english")
-print("-[x] Transmission map: ")
+print("-[x] Transition map: ")
 print(hidden_markov.transitions)
 
 print("\n-[x] Emission map first 100 chars for preview: ")
@@ -162,3 +236,10 @@ print("\n"
       "----------------------------------------------------\n")
 observation_list = hidden_markov.generate(15)
 print(observation_list)
+
+print("\n"
+      "----------------------------------------------------\n"
+      "PART 1 - implement forward()                        \n"
+      "----------------------------------------------------\n")
+most_likely_final_state = hidden_markov.forward(observation_list)
+print("Most likely final state:  " + most_likely_final_state)
