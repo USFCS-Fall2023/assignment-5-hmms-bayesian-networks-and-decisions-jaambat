@@ -104,8 +104,36 @@ class HMM:
             emission_file.close()
 
     # you do this.
-    def generate(self, n):
-        """return an n-length observation by randomly sampling from this HMM."""
+    def generate(self, n: int):
+        """
+        return an n-length observation by randomly sampling from this HMM.
+        :param n: int length of the number of observations.
+        """
+        states = [None for _ in range(n + 1)]
+
+        # Acquire a list of state. The first state must be a starting state
+        starting_state_map = self.transitions["#"]
+        random_choice = random.choice(list(starting_state_map))
+        states[0] = random_choice
+
+        for i in range(1, len(states)):
+            previous_state = states[i - 1]
+
+            state_map = self.transitions[previous_state]
+            random_choice = random.choice(list(state_map))
+            states[i] = random_choice
+
+        # For each of the states get select a random observation from the emissions
+        observations = [None for _ in range(n + 1)]
+
+        for i in range(len(states)):
+            curr_state = states[i]
+
+            emission = self.emissions[curr_state]
+            observation = random.choice(list(emission))
+            observations[i] = observation
+
+        return observations
 
     # you do this: Implement the Viterbi alborithm. Given an Observation (a list of outputs or emissions)
     # determine the most likely sequence of states.
@@ -127,3 +155,10 @@ print(hidden_markov.transitions)
 
 print("\n-[x] Emission map first 100 chars for preview: ")
 print(str(hidden_markov.emissions)[:100] + "...")
+
+print("\n"
+      "----------------------------------------------------\n"
+      "PART 1 - implement generate() n observations        \n"
+      "----------------------------------------------------\n")
+observation_list = hidden_markov.generate(15)
+print(observation_list)
