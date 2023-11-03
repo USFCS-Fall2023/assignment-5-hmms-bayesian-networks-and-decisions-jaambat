@@ -106,31 +106,36 @@ class HMM:
     # you do this.
     def generate(self, n: int) -> list[str]:
         """
-        return an n-length observation by randomly sampling from this HMM.
+        return an n-length observation by randomly sampling from this HMM and using the probabilities as weights
+        from which to select random samples.
         :param n: int length of the number of observations.
         """
-        states = [None for _ in range(n + 1)]
-
-        # Acquire a list of state. The first state must be a starting state
+        # Acquire a list of states by randomly selecting the states while using the probabilities to make the selection.
         starting_state_map = self.transitions["#"]
-        random_choice = random.choice(list(starting_state_map))
-        states[0] = random_choice
+        possible_states = list(starting_state_map)
+        weights_per_state = [float(0) for _ in range(len(possible_states))]
 
-        for i in range(1, len(states)):
-            previous_state = states[i - 1]
+        for i in range(len(weights_per_state)):
+            curr_state = possible_states[i]
+            weights_per_state[i] = starting_state_map[curr_state]
 
-            state_map = self.transitions[previous_state]
-            random_choice = random.choice(list(state_map))
-            states[i] = random_choice
+        states = random.choices(population=possible_states, weights=weights_per_state, k=n)
 
-        # For each of the states get select a random observation from the emissions
-        observations = [None for _ in range(n)]
+        # For each state, get a random observation from the emissions while using probabilities to make the selection
+        observations = ["" for _ in range(n)]
 
-        for i in range(len(states) - 1):
+        for i in range(len(states)):
             curr_state = states[i]
 
-            emission = self.emissions[curr_state]
-            observation = random.choice(list(emission))
+            emission_map = self.emissions[curr_state]
+            possible_emissions = list(emission_map)
+
+            weights_per_emission = [float(0) for _ in range(len(possible_emissions))]
+            for j in range(len(possible_emissions)):
+                curr_emission = possible_emissions[j]
+                weights_per_emission[j] = emission_map[curr_emission]
+
+            observation = random.choices(population=possible_emissions, weights=weights_per_emission, k=1)[0]
             observations[i] = observation
 
         return observations
