@@ -248,11 +248,16 @@ class HMM:
                 starting_probabilities_map = item[1]
                 break
 
-        state_indexes = {}
+        state_index_map = {}
         i = 1
         for item in list(starting_probabilities_map):
-            state_indexes[item] = i
+            state_index_map[item] = i
             i += 1
+
+        # Reference the state names from indexes when needed in back_pointer traversal
+        index_state_map = {}
+        for key, value in state_index_map.items():
+            index_state_map[value] = key
 
         # Initialize viterbi matrix and back pointer matrix, each row will be labeled by the state name as a key
         column_names = ["-"]
@@ -337,11 +342,46 @@ class HMM:
                 viterbi_matrix[curr_state][j] = p_curr_state_given_curr_observation
 
                 # Update back_pointer matrix
-                back_pointer_matrix[curr_state][j] = state_indexes[max_state_name]
+                back_pointer_matrix[curr_state][j] = state_index_map[max_state_name]
 
         # viterbi and back_pointer matrix filled, walk back from back to front of back_pointer
+        # Inspect last column and get state with the highest probability
+        last_column_index = len(column_names) - 1
+        last_column = [(item[0], item[1][last_column_index]) for item in viterbi_matrix.items()]
 
+        entry_name = "None"
+        entry_value = 0
+        for entry in last_column:
+            if entry[1] > entry_value:
+                entry_value = entry[1]
+                entry_name = entry[0]
 
+        # Reference the state with the highest probability and traverse the back_pointer matrix
+        predicted_state_index = back_pointer_matrix[entry_name][last_column_index]
+        predicted_sequence_indexes = [None for _ in range(len(column_names))]
+        predicted_sequence_indexes[last_column_index] = predicted_state_index
+
+        predicted_sequence_states = [None for _ in range(len(column_names))]
+        predicted_sequence_states[last_column_index] = index_state_map[predicted_state_index]
+
+        # Traverse the remaining columns
+        for j in range(last_column_index - 1, 0, -1):  # Stop before index 0, nothing in first column
+            predicted_state_index = predicted_sequence_indexes[j + 1]  # Pull from the previous column
+
+            predicted_state_name = index_state_map[predicted_state_index]
+            predicted_state_index = back_pointer_matrix[predicted_state_name][j]
+
+            if predicted_state_index == 0:
+                # If 0, just use the previous state_name as the indicator of state at time 1.
+                predicted_sequence_states[j] = predicted_state_name
+            else:
+                predicted_sequence_indexes[j] = predicted_state_index
+                predicted_sequence_states[j] = index_state_map[predicted_state_index]
+
+        predicted_sequence_states = [item for item in predicted_sequence_states
+                                     if item is not None]
+
+        return predicted_sequence_states
 
     def read_in_observations(self, observation_file_name: str):
         """
@@ -479,5 +519,6 @@ if __name__ == "__main__":
 
         for observations in observations_list:
             # Take the observation sequences from each row and run viterbi on them
-            hidden_markov.viterbi(observations=observations)
+            predicted_states = hidden_markov.viterbi(observations=observations)
+            print(*predicted_states)
 
