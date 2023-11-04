@@ -172,11 +172,10 @@ class HMM:
         for j in range(1, len(column_names)):
             curr_observation = column_names[j]
 
-            p_curr_state_given_curr_observation = 0
-
             # Calculate P(curr_state | e_n, .... e1) for each of the states
             for item in forward_matrix.items():
                 curr_state = item[0]
+                p_curr_state_given_curr_observation = 0
 
                 if j == 1:
                     p_curr_observation_given_curr_state = None
@@ -199,20 +198,22 @@ class HMM:
                 for state in forward_matrix.items():
                     state_i = state[0]
 
-                    p_curr_observation_given_state_i = None
+                    p_curr_observation_given_curr_state = None
                     try:
-                        p_curr_observation_given_state_i = self.emissions[state_i][curr_observation]
+                        p_curr_observation_given_curr_state = self.emissions[curr_state][curr_observation]
                     except KeyError:
                         # Case where there is no such observation for the given state
-                        p_curr_observation_given_state_i = 0
+                        p_curr_observation_given_curr_state = 0
 
                     p_curr_state_given_state_i = self.transitions[state_i][curr_state]
-                    p_curr_state_prev_column = forward_matrix[curr_state][j - 1]
+                    p_state_i_prev_column = forward_matrix[state_i][j - 1]
 
                     # Apply Bayes rule for each state we loop through.
-                    p_curr_state_given_curr_observation += (p_curr_observation_given_state_i *
-                                                            p_curr_state_given_state_i *
-                                                            p_curr_state_prev_column)
+                    curr_bayes_rule = (p_curr_observation_given_curr_state
+                                       * p_curr_state_given_state_i
+                                       * p_state_i_prev_column)
+
+                    p_curr_state_given_curr_observation += curr_bayes_rule
 
                 # Update the forward matrix AFTER applying the emissions and transitions for every state
                 forward_matrix[curr_state][j] = p_curr_state_given_curr_observation
@@ -230,7 +231,7 @@ class HMM:
 
         return entry_name
 
-    # you do this: Implement the Viterbi alborithm. Given an Observation (a list of outputs or emissions)
+    # you do this: Implement the Viterbi algorithm. Given an Observation (a list of outputs or emissions)
     # determine the most likely sequence of states.
 
     def viterbi(self, observation):
