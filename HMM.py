@@ -8,6 +8,8 @@ import random
 import argparse
 import codecs
 import os
+import typing
+
 import numpy
 
 
@@ -104,11 +106,12 @@ class HMM:
             emission_file.close()
 
     # you do this.
-    def generate(self, n: int) -> list[str]:
+    def generate(self, n: int) -> typing.Tuple[list[str], list[str]]:
         """
         return an n-length observation by randomly sampling from this HMM and using the probabilities as weights
         from which to select random samples.
         :param n: int length of the number of observations.
+        :return: two lists list[str] and list[str] of the states and the actual observations.
         """
         # Acquire a list of states by randomly selecting the states while using the probabilities to make the selection.
         starting_state_map = self.transitions["#"]
@@ -138,7 +141,7 @@ class HMM:
             observation = random.choices(population=possible_emissions, weights=weights_per_emission, k=1)[0]
             observations[i] = observation
 
-        return observations
+        return states, observations
 
     def forward(self, observation_sequence: list[str]) -> str:
         """
@@ -156,7 +159,7 @@ class HMM:
 
         # Initialize forward matrix, each row will be labeled by the state name as a key
         column_names = ["-"]
-        column_names.extend(observation_sequence)
+        column_names.extend(observation_sequence)  # column names: ["-", "observation_1", "observation_2", ... ]
         forward_matrix = {}
         for item in starting_probabilities_map.items():
             if forward_matrix.get(item[0]) is None:
@@ -225,7 +228,8 @@ class HMM:
 
 
 print("----------------------------------------------------\n"
-      "PART 1 - implement load()                           \n"
+      "PART 1 - implement load().                          \n"
+      "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 hidden_markov = HMM()
 hidden_markov.load("two_english")
@@ -238,13 +242,48 @@ print(str(hidden_markov.emissions)[:100] + "...")
 print("\n"
       "----------------------------------------------------\n"
       "PART 1 - implement generate() n observations        \n"
+      "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
-observation_list = hidden_markov.generate(15)
+_, observation_list = hidden_markov.generate(15)
 print(observation_list)
 
 print("\n"
       "----------------------------------------------------\n"
       "PART 1 - implement forward()                        \n"
+      "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 most_likely_final_state = hidden_markov.forward(observation_list)
 print("Most likely final state:  " + most_likely_final_state)
+
+
+# Supporting command line argument calls
+parser = argparse.ArgumentParser(description="Processes routines the evaluate properties of hidden markov models "
+                                             "for a given filename and argument flags")
+parser.add_argument("file", type=str, help="Path of the file to process subroutines from.")
+
+# Add argument flag for --generate and only allow this flag in a command line prompt with mutually exclusive
+generate_flag = parser.add_mutually_exclusive_group()
+generate_flag.add_argument("--generate",
+                           type=int,
+                           help="Generates n number of random observations as specified in the command line argument.")
+
+cli_args = parser.parse_args()
+
+if __name__ == "__main__":
+    print("\n"
+          "----------------------------------------------------\n"
+          "PART 1 - COMMAND LINE ARG OUTPUT                    \n"
+          "----------------------------------------------------\n")
+
+    print(cli_args)
+
+    if cli_args.generate is not None and cli_args.file is not None:
+        file = cli_args.file
+        num_observations = cli_args.generate
+        hidden_markov = HMM()
+        hidden_markov.load(file)
+        state_list, observation_list = hidden_markov.generate(num_observations)
+        print("The observation list from python3 hmm.py two_english --generate [  n  ]")
+
+        print(*state_list)
+        print(*observation_list)
