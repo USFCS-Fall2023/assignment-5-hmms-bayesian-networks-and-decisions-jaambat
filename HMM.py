@@ -234,10 +234,10 @@ class HMM:
     # you do this: Implement the Viterbi algorithm. Given an Observation (a list of outputs or emissions)
     # determine the most likely sequence of states.
 
-    def viterbi(self, observations: list[str]) -> list[str]:
+    def viterbi(self, observation_sequence: list[str]) -> list[str]:
         """
         Determines the most likely sequence of states given a list of observations.
-        :param observations: list[str] of a sequence of observations
+        :param observation_sequence: list[str] of a sequence of observations
         :return: list[str]
         """
 
@@ -261,17 +261,17 @@ class HMM:
 
         # Initialize viterbi matrix and back pointer matrix, each row will be labeled by the state name as a key
         column_names = ["-"]
-        column_names.extend(observations)  # column names: ["-", "observation_1", "observation_2", ... ]
+        column_names.extend(observation_sequence)  # column names: ["-", "observation_1", "observation_2", ... ]
         viterbi_matrix = {}
         back_pointer_matrix = {}
         for item in starting_probabilities_map.items():
             if viterbi_matrix.get(item[0]) is None:
                 # Initialize each row in the viterbi matrix and add column for starting probabilities.
-                viterbi_matrix[item[0]] = [None for _ in range(len(observations) + 1)]
+                viterbi_matrix[item[0]] = [None for _ in range(len(observation_sequence) + 1)]
                 viterbi_matrix[item[0]][0] = item[1]
 
                 # Initialize each row in back pointer matrix and leave the first column empty.
-                back_pointer_matrix[item[0]] = [None for _ in range(len(observations) + 1)]
+                back_pointer_matrix[item[0]] = [None for _ in range(len(observation_sequence) + 1)]
                 back_pointer_matrix[item[0]][0] = None
 
         # ACQUIRE MAX OF BAYES RULE, loop through each column and fill in viterbi_matrix[i, j] and back_pointer_matrix
@@ -333,7 +333,7 @@ class HMM:
                     state_name = list(entry.keys())[0]
                     curr_bayes_rule_value = entry[state_name]
 
-                    if curr_bayes_rule_value > max_state_bayes_rule_value:
+                    if curr_bayes_rule_value >= max_state_bayes_rule_value:
                         max_state_name = state_name
                         max_state_bayes_rule_value = curr_bayes_rule_value
 
@@ -372,8 +372,9 @@ class HMM:
             predicted_state_index = back_pointer_matrix[predicted_state_name][j]
 
             if predicted_state_index == 0:
-                # If 0, just use the previous state_name as the indicator of state at time 1.
-                predicted_sequence_states[j] = predicted_state_name
+                # If 0, acquire the final state from forward and append to end, backtrace does not get last state.
+                final_state = self.forward(observation_sequence=observation_sequence)
+                predicted_sequence_states.append(final_state)
             else:
                 predicted_sequence_indexes[j] = predicted_state_index
                 predicted_sequence_states[j] = index_state_map[predicted_state_index]
@@ -413,7 +414,7 @@ print("----------------------------------------------------\n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 hidden_markov = HMM()
-hidden_markov.load("two_english")
+hidden_markov.load("partofspeech.browntags.trained")
 print("-[x] Transition map: ")
 print(hidden_markov.transitions)
 
@@ -443,7 +444,18 @@ print("\n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 observation_list_from_file = hidden_markov.read_in_observations(observation_file_name="ambiguous_sents.obs")
-print(observation_list_from_file)
+print("%s..." % observation_list_from_file[:10])
+
+print("\n"
+      "----------------------------------------------------\n"
+      "PART 1 - implement viterbi()                        \n"
+      "NOT COMMAND LINE ARG                                \n"        
+      "----------------------------------------------------\n")
+print("PREDICTED STATES:  ")
+for observations in observation_list_from_file:
+    # Take the observation sequences from each row and run viterbi on them
+    predicted_states = hidden_markov.viterbi(observation_sequence=observations)
+    print(*predicted_states)
 
 # Supporting command line argument calls
 parser = argparse.ArgumentParser(description="Processes routines the evaluate properties of hidden markov models "
@@ -519,6 +531,6 @@ if __name__ == "__main__":
 
         for observations in observations_list:
             # Take the observation sequences from each row and run viterbi on them
-            predicted_states = hidden_markov.viterbi(observations=observations)
+            predicted_states = hidden_markov.viterbi(observation_sequence=observations)
             print(*predicted_states)
 
