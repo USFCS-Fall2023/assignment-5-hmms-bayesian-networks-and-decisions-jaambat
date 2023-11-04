@@ -8,6 +8,7 @@ import random
 import argparse
 import codecs
 import os
+import sys
 import typing
 
 import numpy
@@ -178,7 +179,13 @@ class HMM:
                 curr_state = item[0]
 
                 if j == 1:
-                    p_curr_observation_given_curr_state = self.emissions[curr_state][curr_observation]
+                    p_curr_observation_given_curr_state = None
+                    try:
+                        p_curr_observation_given_curr_state = self.emissions[curr_state][curr_observation]
+                    except KeyError:
+                        # Case where there is no such state for the current observation.
+                        # "i" can never be ADV based on the supplied emissions
+                        p_curr_observation_given_curr_state = 0
 
                     matrix_row = item[1]
                     p_curr_state = matrix_row[0]
@@ -192,9 +199,15 @@ class HMM:
                 for state in forward_matrix.items():
                     state_i = state[0]
 
-                    p_curr_observation_given_state_i = self.emissions[state_i][curr_observation]
+                    p_curr_observation_given_state_i = None
+                    try:
+                        p_curr_observation_given_state_i = self.emissions[state_i][curr_observation]
+                    except KeyError:
+                        # Case where there is no such observation for the given state
+                        p_curr_observation_given_state_i = 0
+
                     p_curr_state_given_state_i = self.transitions[state_i][curr_state]
-                    p_curr_state_prev_column = forward_matrix[state_i][j - 1]
+                    p_curr_state_prev_column = forward_matrix[curr_state][j - 1]
 
                     # Apply Bayes rule for each state we loop through.
                     p_curr_state_given_curr_observation += (p_curr_observation_given_state_i *
@@ -226,6 +239,30 @@ class HMM:
         the output sequence, using the Viterbi algorithm.
         """
 
+    def read_in_observations(self, observation_file_name: str):
+        """
+        Reads-in the observations from a file and produces sequences of observations for each line.
+        These sequence will be used by the hidden markov routines in forward and viterbi.
+        :param observation_file_name: file name to read in sequences of observations.
+        :return: list[list[str]] where each row is a list[str]. The list[str] is a sequence of observations.
+        """
+        observation_file = None
+        observation_lines = None
+
+        try:
+            observation_file = open(observation_file_name, "r")
+            observation_lines = observation_file.readlines()
+            observation_lines = [item.strip() for item in observation_lines  # Remove the white space
+                                 if len(item.strip()) > 0]  # Skip adding blank lines to the list
+        except FileNotFoundError:
+            raise FileNotFoundError("The specified observation file could not be found.")
+        except OSError:
+            raise OSError("There was an issue with reading the observation file.")
+        finally:
+            observation_file.close()
+
+        return [item.split(" ") for item in observation_lines]
+
 
 print("----------------------------------------------------\n"
       "PART 1 - implement load().                          \n"
@@ -244,17 +281,25 @@ print("\n"
       "PART 1 - implement generate() n observations        \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
-_, observation_list = hidden_markov.generate(15)
-print(observation_list)
+_, observations_list = hidden_markov.generate(15)
+print(observations_list)
 
 print("\n"
       "----------------------------------------------------\n"
       "PART 1 - implement forward()                        \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
-most_likely_final_state = hidden_markov.forward(observation_list)
+most_likely_final_state = hidden_markov.forward(observations_list)
 print("Most likely final state:  " + most_likely_final_state)
 
+print("\n"
+      "----------------------------------------------------\n"
+      "PART 1 - Testing my implementation of               \n"
+      "read_in_observations()                              \n"
+      "NOT COMMAND LINE ARG                                \n"        
+      "----------------------------------------------------\n")
+observation_list_from_file = hidden_markov.read_in_observations(observation_file_name="ambiguous_sents.obs")
+print(observation_list_from_file)
 
 # Supporting command line argument calls
 parser = argparse.ArgumentParser(description="Processes routines the evaluate properties of hidden markov models "
@@ -267,7 +312,19 @@ generate_flag.add_argument("--generate",
                            type=int,
                            help="Generates n number of random observations as specified in the command line argument.")
 
-cli_args = parser.parse_args()
+# Add argument flag for --forward and only allow this flag with mutually exclusive
+forward_flag = parser.add_mutually_exclusive_group()
+generate_flag.add_argument("--forward",
+                           type=str,
+                           help="Runs the forward algorithm on a file of observations and for each observation, "
+                                "the algorithm will provide the most likely final state.")
+cli_args = None
+
+try:
+    cli_args = parser.parse_args()
+except IndexError:
+    print("Command line arguments were not provided.")
+    sys.exit()
 
 if __name__ == "__main__":
     print("\n"
@@ -276,14 +333,31 @@ if __name__ == "__main__":
           "----------------------------------------------------\n")
 
     print(cli_args)
-
-    if cli_args.generate is not None and cli_args.file is not None:
+    file = None
+    if cli_args.file is not None:
         file = cli_args.file
+        print(file)
+
+    hidden_markov = HMM()
+    hidden_markov.load(file)
+
+    if cli_args.generate is not None:
+        # Supports generate() in the command line
         num_observations = cli_args.generate
-        hidden_markov = HMM()
-        hidden_markov.load(file)
-        state_list, observation_list = hidden_markov.generate(num_observations)
+        state_list, observations_list = hidden_markov.generate(num_observations)
         print("The observation list from python3 hmm.py two_english --generate [  n  ]")
 
         print(*state_list)
-        print(*observation_list)
+        print(*observations_list)
+
+    if cli_args.forward is not None and cli_args.file is not None:
+        # Supports forward() in the command line
+        observation_file_name = cli_args.forward
+        observations_list = hidden_markov.read_in_observations(observation_file_name)
+        print("** Observations from file [  %s  ] **\n%s\n" % (observation_file_name, observations_list))
+
+        for observations in observations_list:
+            # Take the observation sequences from each row and run forward on them
+            most_likely_final_state = hidden_markov.forward(observation_sequence=observations)
+            print(most_likely_final_state)
+
