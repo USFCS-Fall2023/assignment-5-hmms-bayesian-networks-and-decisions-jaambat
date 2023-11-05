@@ -5,6 +5,8 @@ Assignment 5
 """
 
 import HMM
+import alarm
+import carnet
 """
 cd assignment-5-hmms-bayesian-networks-and-decisions-jaambat
 mkdir venv

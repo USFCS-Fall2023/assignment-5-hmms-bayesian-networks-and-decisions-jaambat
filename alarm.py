@@ -67,6 +67,7 @@ print("\n"
       "given that John called.                                 \n"        
       "--------------------------------------------------------\n")
 print(alarm_infer.query(variables=["MaryCalls"], evidence={"JohnCalls": "yes"}))
+print("** The probability that Mary calls given John called: 0.1002 **")
 
 print("\n"
       "--------------------------------------------------------\n"
@@ -75,9 +76,13 @@ print("\n"
       "--------------------------------------------------------\n")
 print(alarm_infer.query(variables=["JohnCalls", "MaryCalls"], evidence={"Alarm": "yes"}))
 
+print("** Probability that both John and Mary call given Alarm: 0.0950**")
+
+
 print("\n"
       "--------------------------------------------------------\n"
       "PART 3.1 - Determine the probability of Alarm given     \n"
       "that Mary called.                                       \n"        
       "--------------------------------------------------------\n")
 print(alarm_infer.query(variables=["Alarm"], evidence={"MaryCalls": "yes"}))
+print("** Probability of Alarm given Mary called: 0.9826 **")

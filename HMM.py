@@ -487,19 +487,17 @@ try:
     cli_args = parser.parse_args()
 except IndexError:
     print("Command line arguments were not provided.")
-    sys.exit()
 
 if __name__ == "__main__":
     print("\n"
           "----------------------------------------------------\n"
-          "PART 1 - COMMAND LINE ARG OUTPUT                    \n"
+          "PART 1 - COMMAND LINE ARG OUTPUT -- USE TERMINAL    \n"
           "----------------------------------------------------\n")
 
     print(cli_args)
     file = None
     if cli_args.file is not None:
         file = cli_args.file
-        print(file)
 
     hidden_markov = HMM()
     hidden_markov.load(file)
