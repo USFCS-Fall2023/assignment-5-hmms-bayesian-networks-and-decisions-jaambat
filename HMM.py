@@ -410,7 +410,7 @@ class HMM:
 
 
 print("----------------------------------------------------\n"
-      "PART 1 - implement load().                          \n"
+      "PART 2 - implement load().                          \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 hidden_markov = HMM()
@@ -423,7 +423,7 @@ print(str(hidden_markov.emissions)[:100] + "...")
 
 print("\n"
       "----------------------------------------------------\n"
-      "PART 1 - implement generate() n observations        \n"
+      "PART 2 - implement generate() n observations        \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 _, observations_list = hidden_markov.generate(15)
@@ -431,7 +431,7 @@ print(observations_list)
 
 print("\n"
       "----------------------------------------------------\n"
-      "PART 1 - implement forward()                        \n"
+      "PART 2 - implement forward()                        \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 most_likely_final_state = hidden_markov.forward(observations_list)
@@ -439,7 +439,7 @@ print("Most likely final state:  " + most_likely_final_state)
 
 print("\n"
       "----------------------------------------------------\n"
-      "PART 1 - Testing my implementation of               \n"
+      "PART 2 - Testing my implementation of               \n"
       "read_in_observations()                              \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
@@ -448,7 +448,7 @@ print("%s..." % observation_list_from_file[:10])
 
 print("\n"
       "----------------------------------------------------\n"
-      "PART 1 - implement viterbi()                        \n"
+      "PART 2 - implement viterbi()                        \n"
       "NOT COMMAND LINE ARG                                \n"        
       "----------------------------------------------------\n")
 print("PREDICTED STATES:  ")
