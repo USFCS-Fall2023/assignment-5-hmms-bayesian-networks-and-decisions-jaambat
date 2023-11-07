@@ -1,0 +1,128 @@
+James Ambat
+CS-462
+Assignment 5
+
+                                               Written Portion
+Part 1.
+Our Mars rover has been out collecting samples, and it needs to return to the charging station as quickly as possible.
+
+It knows that over rocky terrain it can go 2 km/h. Over sandy terrain it can go 3 km/h, and over smooth terrain it can
+go 5 km/h.
+
+There are three routes it might choose from. Unfortunately, our terrain data for the three routes is incomplete, so we
+only have estimates.
+
+    Route 1 is 2 km long. There is a 20% chance it is sandy, 30% chance it is smooth, and a 50% chance it is rocky.
+    Route 2 is 1.8 km long. There is a 40% chance it is sandy, a 20% chance it is smooth, and a 40 % chance it is rocky.
+    Route 3 is 3.1 km long. There is a 50% chance it is sandy, a 40% chance it is smooth, and a 10% chance it is rocky.
+
+**(10 points)** Which route should we pick? Show your work.
+Sandy:  3 km/h
+Smooth: 5 km/h
+Rocky:  2 km/h
+
+Route 1
+-----------------------------------------------------------------
+  Expected Speed Route 1 = 0.2 * 3 + 0.3 * 5 + 0.5 * 2
+                         = 3.1 km/h
+
+     Travel Time Route 1 = Distance / Speed
+                         = 2 km / 3.1 km/h
+                         = 0.6451 hrs
+
+Route 2
+-----------------------------------------------------------------
+  Expected Speed Route 2 = 0.4 * 3 + 0.2 * 5 + 0.4 * 2
+                         = 3.0 km/h
+
+     Travel Time Route 2 = Distance / Speed
+                         = 1.8 km / 3.0 km/h
+                         = 0.6 hrs  *** LEAST TRAVEL TIME
+
+Route 3
+-----------------------------------------------------------------
+  Expected Speed Route 3 = 0.5 * 3 + 0.4 * 5 + 0.1 * 2
+                         = 3.7 km/h
+
+     Travel Time Route 3 = Distance / Speed
+                         = 3.1 km / 3.7 km/h
+                         = 0.8378 hrs
+RESPONSE:
+----------------------------------------------------------------
+* We should pick Route 2 because it has the least travel time.
+
+
+We have now found out some additional information.
+    Route 1 contains a crater. If the wall of the crater is intact, we can go through it.
+    If the wall has been damaged, we will need to go around, which will add 45 minutes to our journey.
+    There is a 30% chance that the wall is damaged.
+
+    Route 2 contains a bridge. If that bridge is damaged, we will need to repair it, which
+    will add 1 hour to our time. There is a 60% chance that the bridge is out.
+
+**(10 points)** Now which route should we pick? Show your work.
+If Route 1's crater wall is intact, it will take 0.6451 hrs.
+If Route 1's crater wall is damaged, it will take 0.75 hrs + 0.6451 hrs = 1.3951 hrs.
+* The expected utility Route 1 = 0.7 * 0.6451 hrs + 0.3 * 1.3951 hrs
+                               = 0.8701 hrs
+                               (pay up to 0.22499 hrs for this info: 0.8701 - 0.6451 = 0.22499)
+
+
+If Route 2's bridge is not damaged, it will take 0.6 hrs.
+If Route 2's bridge is damaged, it will take 1.6 hrs (1 + 0.6 = 1.6).
+* The expected utility Route 2 = 0.4 * 0.6 hrs + 0.6 * 1.6 hrs
+                               = 1.2 hrs
+                               (pay up to 0.6 hrs for this info: 1.2 - 0.6 = 0.6)
+
+* The expected utility Route 3 = 0.8378 hrs, which is the same from the previous problem
+
+
+Route 1: if we pay up to 0.22499 hours to know if the crater wall is intact, it will take 0.8701 hrs (0.22499 + 0.6451).
+Route 1: if we pay up to 0.22499 hours and find the crater wall is not intact, it will take 1.620 hrs (0.22499 + 1.3951).
+
+
+Route 2: if we pay up to 0.6 hours to know if the bridge is not damaged, it will take a total of: 1.2 hrs (0.6 + 0.6)
+Route 2: if we pay up to 0.6 hours and find the bridge is damaged, it will take a total of: 2.2 hours (1.6 + 0.6)
+
+Route 3: the expected time is 0.8378 hrs ***NOT SMOOTH *** ()
+
+RESPONSE:
+------------------------
+* We should pick route 3
+
+
+**(10 points)** Now suppose that we can use a satellite to find out whether the terrain in route 3 is smooth.
+Is this helpful? What is the value of this information? Expressed differently, how long are we
+willing to wait for this information from the satellite?
+
+Route 3
+-----------------------------------------------------------------
+Sandy:  3 km/h
+Smooth: 5 km/h
+Rocky:  2 km/h
+
+ ORIGINAL EXPECTED SPEED = 0.5 * 3 + 0.4 * 5 + 0.1 * 2
+                         = 3.7 km/h
+
+     Travel Time Route 3 = Distance / Speed
+                         = 3.1 km / 3.7 km/h
+                         = 0.8378 hrs
+
+  Expected Speed Route 3 SMOOTH = 5 km/h
+     Travel Time Route 3 SMOOTH = Distance / Speed
+                         = 3.1 km / 5 km/h
+                         = 0.62 hrs
+                         (pay up to 0.2178 hrs for this info: 0.8378 - .62 = 0.2178)
+
+Route 3: if we pay 0.2178 hrs to know if surface is smooth, it will take a total of:
+     0.8378 hrs (0.62 + 0.2178)
+
+If not SMOOTH: 3.1 km / 2 km/h = 1.55 hrs ONLY IF we stay on Route 3
+    * So we can choose from route 1 or route 2:
+        * 0.8701 hrs from route 1
+        * 1.2    hrs from route 2
+
+RESPONSE:
+Choose route 1
+
+
