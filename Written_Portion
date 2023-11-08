@@ -137,4 +137,167 @@ from Question 1.2 to make the decision.
 
 
 
+Question 4
+[AINow](https://ainowinstitute.org/) is a research institute that produces policy analysis addressing the concentration
+of power in the tech industry.
+They have recently published a landscape report assessing the state of the AI industry and making policy recommendations.
+
+Please read the [executive summary](https://ainowinstitute.org/wp-content/uploads/2023/04/Exec-Summary-AI-Now-2023-Landscape-Report-.pdf) and answer the following questions:
+
+- What are the three dimensions along which Big Tech has an advantage in AI?
+The three dimensions are the data advantage, computing power, and geopolitical advantage.
+    * Data advantage: From the reading, I take this to mean that Big Tech companies that have access to raw data can
+    surveil massive data banks and control the market of AI products just by the fact that they can access and process
+    large amounts of data and create products and services from it. A smaller company cannot really compete against Big
+    Tech that has the infrastructure and access to all the data needed to create AI products.
+
+    * Computing Power. From the reading, I take this to mean that Big Tech has the resources (both infrastructure, and
+    labor pool) to actually create products that compete at scale. And while other AI companies can make products,
+    they are still using Big Tech's infrastructures, tools, and even data to create their products.
+
+    * Geopolitical. From the reading, I take this to mean that since Big Tech's AI products have become interrlated to
+    the USA's and other countries dominance over the world, the focus and attention on Big Tech (including their
+    time, money, attention, and interests) are at the forefront of political, military, and societal discussion and
+    policy making. I find this a little disturbing since there are many other societal and economic problems that our
+    world and human society can solve to make the world a safer and more peaceful planet vs. all the hype and attention
+    focussed on AI products.
+
+- Why does AI Now think it's important to focus on Big Tech?
+AI Now thinks it's important to focus on Big Tech since the focus can:
+    * (1) help communities, governments, and societies identify and address critical concerns.
+        * Some of the concerns are data surveillance, patterns of inequality and discrimiation, and consolidation of
+        power.
+    * (2) temper, address, and understand knock-on effects of Big Tech's influence in certain markets.
+        * Big Tech has been shown to influence market trends that end up shaping business models and sometime in
+        negative, ineffective, or counter productive means to society.
+    * (3) prevent Big Tech from becoming infrastructural and a single point of failure due to an over reliance on
+    Big Tech.
+        * With an over-reliance on Big Tech, humans and governments are not only making Big Tech a single point of
+        failure, we are really handing over all the resources, time, energy, and attention to a business model that we
+        can argue is not even productive to solving some of our world's toughest problems.
+
+- Priority 1 discusses Algorithmic Accountability. What does this mean? Why is it important to shift responsibility
+for detecting harm on companies themselves?
+This means that the Tech companies themselves must be accountable for the harms and impacts their products cause vs.
+third party regulators or investigative personnel uncovering damaging effects of the AI products that are being
+manufactured and consumed. AI Now highlights that leaning on investigative work with audits may further entrench power
+and systemic issues within Big Tech firms and distract from actually addressing violations or lack of accountability for
+harmful practices that are creating chaotic business models and harming societies. Additionally, the accountability is
+placed on the those agencies that have very limited technical, financial, and auditing resources. With such a large
+landscape to audit it may be nearly impossible for a small organized group of auditors, with limited technical resources,
+to conduct complete and fair audits within a reasonable timeline.
+AI Now also highlights that the systems which need to be audited are very large; so large that with the given lack of
+audit requirements, and identifiable harms, would make it difficult for auditors to even come up with a template for
+which to audit the products for risks and harms. Given the aforementioned limitations, external audits devolve into
+"check in the box" exercises. Because of this it is ever more important for Big Tech to provide
+reasonably available means to access the data so that the public and vetted researchers can evaluate the harms and
+hold Big Tech accountable for their products. Lastly by making Big Tech demonstrate that their products are fit for
+public use and public consumption (through reporting, analysis, impact statements, and publicly available data)
+more clarity on risks, standards, and even the lack of assessments becomes Big tech's burden to carry and not the
+resource-limited auditors.
+
+
+- What are the windows for action that are identified? Which do you personally think are the most effective or promising?
+The windows for action are:
+    (1) Contain tech firm's data advantage.
+        * This means limiting the a companies data advantage by utilizing clear rules in data collection, connecting
+        privacy laws and competition laws in development of AI policies, scrutinizing consolidation of data advantages
+        through mergers.
+    (2) Build support for competition reforms to reduce concentration in tech.
+        * This means aggressively curbing mergers and acting strong penalties for anti-competitive actions.
+        * This also means recognizing the affects of any "AI race" hype that can affect policy and regulations.
+        * Anti-trust enforcers should be given the strongest tools to challenge abusive practices in Big Tech.
+        * Competition analysis should be applied across all tech policy domains.
+    (3) Regulate ChatGPT and other large-scale models
+        * This ensures that more regulation and scrutiny should be applied to AI products when they are used for
+        specific purposes and tasks.
+        * This also requires heavy documentation so that developers can be held accountable for their products.
+        * Laws should be formally published so that AI product owners can be publicly accountable.
+        * This also means heavily scrutinizing the openness of their data resources.
+
+    (4) Displace audits as primary policy response to harmful AI.
+        * Another way to hold Big Tech accountable is needed. Audits further entrench Big Tech's power.
+        * Strong bans, rules, and limitations are needed to curb irresponsible rollouts of AI products.
+    (5) Future proof against quiet expansion of biometric surveillance into new domains.
+        * Regulation needs to be published with very clear limitations to biometric surveillance so that
+        biometric surveillance cannot transpose itself to other domains without repercussion or visibility.
+        * Strong data minimization efforts and policies are needed to further impeded unnecessary advancement of
+        harmful biometric surveillance.
+    (6) Enact strong curbs on worker surveillance.
+        * Workers should have more control of their data and biometrics than the employers.
+        * To implement this, clear guidelines and laws are needed ensure workers are protected.
+        * Developers and Employers should be held accountable for managing the data, not simply having the workers
+        accept and waive liability.
+        * Regulation of automated employee functions are needed.
+    (7) Prevent international preemption by digital trade agreements that can be used to weaken national regulation on
+    algorithmic accountability and competition policy.
+        * This means that Big Tech cannot use trade agreements to exploit loop holes for regualtion that would have
+        other wise applied in other countries.
+        * This also means preventing the disclosure of code or algorithms just because a trade agreement is in place.
+
+The windows I think will be the most effective are:
+(1) Contain tech firm's data advantage,
+(3) Regulate ChatGPT and other large-scale models,
+(4) Displace audits as primary policy response to harmful AI, and
+(5) Future proof against quiet expansion of biometric surveillance into new domains.
+
+I think that acting on these 4 windows now will be the most effective to proactively (vs. reactively) deal with the
+responsible role out of AI products. I agree with AI Now that an audit based approach cannot scale with the speed and
+growth that Big Tech moves. This lack of velocity has caused auditors and even regulation rollouts to miss out on
+recognizing that Big Tech actually has a monopoly over all our data, is re-feeding humans back this safe-guarded data
+to make more money, all while real-human problems like world peace, hunger, energy consumption, and homelessness
+ARE NOT being solved with new these technologies. Moreover, when a startup company tries to make an AI product,
+the Big Tech somehow claims rights and power over the data and technologies used to "invent" AI products for human
+consumption. Containing tech firm's data advantage will help the responsible build out of AI product from a different
+lense; a lense that is not driven by profits, moving fast, and monopolizing over creativity and innovations.
+Additionally regulating ChatGPT with very strong accountability measures is needed to prevent abuse and lack of
+accountability from developers when harmful risks become actual hazards. The developers and organizations cannot
+simply just walk away and claim that it's just the "unintended side effects of the software". If these harmful side
+effects ensue, the developers and companies of these new LLMs need to be accountable and liable, and just be able
+to walk away from the problem just because there are no regulations -- the quicker we can enact regulations, the
+less entrenched and "lawless" this new landscape of LLMs can become. And if AI companies are not subjected to mere
+audits but should be held liable for their reporting, impact statements, studies, and consumption research,
+AI companies will think more than twice about just shipping a product for the hype, profits, and visibility; they will
+be forced to think about (and thoroughly study) the repercussions and harms of their products. And by
+future-proofing biometric collection with blatantly and strong regulation, we can prevent derivatives of harms that
+come from aggressive surveillance, while containing the damage that may have ensure from a real AI mishap.
+
+- The executive summary contains this quote:
+
+"These are only a handful of examples, and what they make clear is that there is nothing about
+artificial intelligence that is inevitable. Only once we stop seeing AI as synonymous with progress
+can we establish popular control over the trajectory of these technologies and meaningfully confront
+their serious social, economic, and political impacts—from exacerbating patterns of inequality in
+housing, credit, healthcare, and education to inhibiting workers’ ability to organize and incentivizing
+content production that is deleterious to young people’s mental and physical health."
+
+Do you agree with this assessment? How might we rethink our relationship with AI and with technology in order to
+avoid these potential negative outcomes?
+I do agree with this assessment. Current trends, news, hype, and even just where the money is all flowing, is
+affecting decision making of people, organizations, governments, militaries, and even Big Tech companies invest
+and operate ways that don't always help people and societies; but just because all the momentum and money is flowing
+in a certain direction does not mean humans, societies, and people just have to accept trends, harmful affects, or
+deeply entrenched Big Tech companies and their products. We should rethink our relationship with AI as if we are
+directly consuming it like food, drink, and medicines. People should be empowered, educated, and knowledgeable
+enough to understand the AI products that are being used on them (whether directly or indirectly) just as if a person
+is able to read the nutrition label on any regulated food, beverage, or medicine. Additionally, food, beverages, and
+medicines are highly regulated with lots of testing, research, and human trials before they are "released into the
+wild". And even when they are released the regulation and oversight allows for the responsible drawback and recall
+of hazardous effect and products. The same approach needs to be applied with AI. An example I think of applies to
+self driving cars. I find it hard to believe that a self-driving car can be released into the wild without having
+to take a "DMV driver's license test" with the same scrutiny and rigor as any person undergoes. But somehow, the
+money, profits, and Big Tech influence allows it to happen. If we rethink our relationship with AI be as highly
+regulated as food, beverages, and medicines, it would vastly change the way we as humans create human-centered AI
+products.
+
+
+Now paste this last question into ChatGPT and include its response. How do you compare its output to your own?
+
+The ChatGPT response appears to hone in on keywords and attempts to guess at the context of these key words and
+provide a human-like response. However, the explanation of the key words and it's attempt to explicitly answer the
+question is a little out of context. The LLM even says that it has no opinions but only provides some analysis as
+outlined in it's review of they key words it identifies.
+
+
+
 
